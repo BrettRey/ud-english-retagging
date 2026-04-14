@@ -1,0 +1,22 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it using the metadata below."
+title: "UD English Retagging"
+type: software
+version: "0.1.0"
+date-released: 2026-04-14
+license: "MIT"
+abstract: >-
+  Deterministic, CGEL-aligned retagging for selected closed-class mismatch
+  categories in UD English corpora, emitted as a parallel sidecar TSV layer.
+authors:
+  - family-names: "Reynolds"
+    given-names: "Brett"
+repository-code: "https://github.com/BrettRey/ud-english-retagging"
+url: "https://github.com/BrettRey/ud-english-retagging"
+keywords:
+  - "CGEL"
+  - "Universal Dependencies"
+  - "corpus linguistics"
+  - "retagging"
+  - "CoNLL-U"
+  - "rule-based NLP"
