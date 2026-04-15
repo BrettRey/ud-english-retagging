@@ -6,7 +6,7 @@
 
 **Goal:** Build a parallel annotation layer for UD English corpora that retags selected CGEL/UD mismatch classes according to CGEL-aligned categories. This is a corpus engineering project, not a paper.
 
-**Approach:** Deterministic rule-based retagging with manual adjudication of residual cases. Parallel layer (not overwriting UD tags). The current stabilized layer covers EWT `dev`/`test`/`train`, GUM `dev`/`test`/`train`, ATIS `dev`/`test`/`train`, `en_gentle-ud-test`, `en_ctetex-ud-test`, `en_pronouns-ud-test`, and `en_pud-ud-test` using sidecar TSV output and a CSV rule table. GUMReddit is frozen at partial coverage through a structural fallback layer plus narrow MISC-hint recovery because its surface FORM/LEMMA columns are delexicalized.
+**Approach:** Deterministic rule-based retagging with manual adjudication of residual cases. Parallel layer (not overwriting UD tags). The current stabilized layer covers EWT `dev`/`test`/`train`, GUM `dev`/`test`/`train`, ATIS `dev`/`test`/`train`, `en_gentle-ud-test`, `en_ctetex-ud-test`, `en_littleprince-ud-test`, `en_pronouns-ud-test`, and `en_pud-ud-test` using sidecar TSV output and a CSV rule table. GUMReddit is frozen at partial coverage through a structural fallback layer plus narrow MISC-hint recovery because its surface FORM/LEMMA columns are delexicalized.
 
 ## Annotation Layer
 
@@ -54,12 +54,13 @@ All 16 UD English corpora are symlinked in `data_raw/` from `corpora/ud-english/
 - **atis** — `en_atis-ud-dev.conllu`, `en_atis-ud-test.conllu`, `en_atis-ud-train.conllu`
 - **gentle** — `en_gentle-ud-test.conllu`
 - **ctetex** — `en_ctetex-ud-test.conllu`
+- **littleprince** — `en_littleprince-ud-test.conllu`
 - **pronouns** — `en_pronouns-ud-test.conllu`
 - **pud** — `en_pud-ud-test.conllu`
 - **gumreddit** — `en_gumreddit-ud-dev.conllu`, `en_gumreddit-ud-test.conllu`, `en_gumreddit-ud-train.conllu` (frozen partial structural coverage only)
 
-**Next targets after the EWT/GUM/ATIS/GENTLE/PUD/pronouns pass:**
-- additional corpora with overt lexical forms, preferably `lines`, `partut`, `pcedt`, or `littleprince`
+**Next targets after the EWT/GUM/ATIS/GENTLE/PUD/pronouns/littleprince pass:**
+- additional corpora with overt lexical forms, preferably `partut`, `lines`, or `pcedt`
 
 **Additional corpora:**
 - **atis** — Air Travel Information System

@@ -1,12 +1,12 @@
 # STATUS.md
 
-**Status:** EWT, GUM, ATIS, GENTLE, CTeTex, pronouns, and PUD stabilized; GUMReddit frozen as partial coverage
+**Status:** EWT, GUM, ATIS, GENTLE, CTeTex, pronouns, PUD, and littleprince stabilized; GUMReddit frozen as partial coverage
 **Created:** 2026-04-14
 **Last updated:** 2026-04-14
 
 ## Current State
 
-The project now has a working CGEL-aligned sidecar pipeline across all EWT splits, all GUM splits, all ATIS splits, `en_gentle-ud-test`, `en_ctetex-ud-test`, `pronouns`, `PUD`, and a frozen partial-coverage GUMReddit layer.
+The project now has a working CGEL-aligned sidecar pipeline across all EWT splits, all GUM splits, all ATIS splits, `en_gentle-ud-test`, `en_ctetex-ud-test`, `en_littleprince-ud-test`, `pronouns`, `PUD`, and a frozen partial-coverage GUMReddit layer.
 
 Implemented:
 
@@ -30,6 +30,7 @@ Implemented:
 - `data_derived/en_atis-ud-train.cgel.tsv`
 - `data_derived/en_gentle-ud-test.cgel.tsv`
 - `data_derived/en_ctetex-ud-test.cgel.tsv`
+- `data_derived/en_littleprince-ud-test.cgel.tsv`
 - `audit/en_ewt-ud-dev.cgel.txt`
 - `audit/en_ewt-ud-test.cgel.txt`
 - `audit/en_ewt-ud-train.cgel.txt`
@@ -46,6 +47,7 @@ Implemented:
 - `audit/en_atis-ud-train.cgel.txt`
 - `audit/en_gentle-ud-test.cgel.txt`
 - `audit/en_ctetex-ud-test.cgel.txt`
+- `audit/en_littleprince-ud-test.cgel.txt`
 
 Current covered mismatch classes:
 
@@ -145,6 +147,10 @@ Current `CTeTex` results:
 
 - `test`: 1,601 rows, 1,601 auto, 0 review
 
+Current `littleprince` results:
+
+- `test`: 2,032 rows, 2,032 auto, 0 review
+
 ## Next Steps
 
 - [x] Symlink UD English corpora to `data_raw/` (16 corpora linked from `corpora/ud-english/`)
@@ -185,5 +191,6 @@ Current `CTeTex` results:
 - [x] Extend the stabilized rule table to `ATIS`
 - [x] Extend the stabilized rule table to `GENTLE`
 - [x] Extend the stabilized rule table to `CTeTex`
+- [x] Extend the stabilized rule table to `littleprince`
 - [x] Retag `other` as `adjective`
 - [ ] Extend the stabilized rule table to the next overt-form corpus
