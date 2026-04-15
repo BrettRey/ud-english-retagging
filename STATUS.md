@@ -63,7 +63,7 @@ Current covered mismatch classes:
 - clear complement-clause `if`, including coordinated complement-clause uses, retagged as subordinator via a head-dependency heuristic
 - infinitival `for` retagged as subordinator
 - infinitival `to` retagged as a verb (`auxiliary_infinitival`)
-- `ADV` items in the current intransitive-preposition set retagged as prepositions
+- `ADV` items in the current intransitive-preposition set retagged as prepositions, including the appendix-backed tranche `out`, `in`, `over`, `ago`, `before`, `once`, `forward`, `ahead`, `apart`, `hence`, and `forth`
 - dependent possessive `DET` items like `my`, `your`, `their`, and `its` retained as `pronoun[possessive]`
 - contracted `n't` retagged as `morpheme[negative_enclitic]`
 - `so/SCONJ` retagged as `preposition[clausal]` for the current purpose/result uses covered by UD `SCONJ`
@@ -93,23 +93,23 @@ Current covered mismatch classes:
 
 The `data_raw/` symlink layer has also been corrected so the local corpus mirrors now resolve to the actual `../../corpora/ud-english/` tree.
 
+A corpus-prioritized pass against the `Language Landscapes` preposition appendix has now added 975 more auto-tagged `ADV -> preposition[intransitive]` rows across the overt-form corpora without changing any review totals.
+
 Current EWT results:
 
-- `dev`: 6,007 rows, 6,007 auto, 0 review
-- `test`: 5,893 rows, 5,893 auto, 0 review
-- `train`: 51,768 rows, 51,768 auto, 0 review
+- `dev`: 6,074 rows, 6,074 auto, 0 review
+- `test`: 5,950 rows, 5,950 auto, 0 review
+- `train`: 52,243 rows, 52,243 auto, 0 review
 
 The remaining review burden in EWT is now zero.
 
 Current GUM results:
 
-- `dev`: 7,233 rows, 7,233 auto, 0 review
-- `test`: 7,037 rows, 7,037 auto, 0 review
-- `train`: 43,739 rows, 43,738 auto, 1 review
+- `dev`: 7,269 rows, 7,269 auto, 0 review
+- `test`: 7,076 rows, 7,076 auto, 0 review
+- `train`: 43,988 rows, 43,988 auto, 0 review
 
-The remaining review burden is now limited to one GUM-train token:
-
-- `Mat` in a foreign quoted name (`Mat Fereder`)
+The remaining review burden in GUM is now zero for English-target material.
 
 Current GUMReddit results:
 
@@ -121,7 +121,7 @@ GUMReddit remains only partially covered because the corpus is delexicalized: FO
 
 The GUMReddit row count rose slightly in `test` and `train` because the hint-backed matching now also recovers a few non-`DET`/`PRON` items whose lexical identity is visible only in metadata, such as `n't`, infinitival `to`, and a handful of typo-corrected subordinators or possessives.
 
-Anonymous fallback behavior has been eliminated from the current EWT outputs and from all but one token in GUM. GUMReddit still has a real residual review queue due to corpus delexicalization. Sidecar TSV omits sentence text by default; `--include-text` is available for manual review workflows.
+Anonymous fallback behavior has been eliminated from the overt-form corpora. Foreign-string residue such as `Mat` in `Mat Fereder` is classified as `x[foreign_component]` but does not count against the English review burden. GUMReddit still has a real residual review queue due to corpus delexicalization. Sidecar TSV omits sentence text by default; `--include-text` is available for manual review workflows.
 
 Current `pronouns` results:
 
@@ -129,17 +129,17 @@ Current `pronouns` results:
 
 Current `PUD` results:
 
-- `test`: 4,548 rows, 4,548 auto, 0 review
+- `test`: 4,573 rows, 4,573 auto, 0 review
 
 Current `ATIS` results:
 
 - `dev`: 1,195 rows, 1,195 auto, 0 review
-- `test`: 1,107 rows, 1,107 auto, 0 review
-- `train`: 8,244 rows, 8,244 auto, 0 review
+- `test`: 1,109 rows, 1,109 auto, 0 review
+- `train`: 8,247 rows, 8,247 auto, 0 review
 
 Current `GENTLE` results:
 
-- `test`: 3,685 rows, 3,685 auto, 0 review
+- `test`: 3,707 rows, 3,707 auto, 0 review
 
 Current `CTeTex` results:
 
@@ -160,6 +160,7 @@ Current `CTeTex` results:
 - [x] Retag infinitival `for` as `subordinator`
 - [x] Retag infinitival `to` as `verb[auxiliary_infinitival]`
 - [x] Expand the `ADV -> preposition[intransitive]` layer to the broader EWT set
+- [x] Expand the `ADV -> preposition[intransitive]` layer with appendix-backed items attested in the covered corpora
 - [x] Retag the clear coordinator inventory as `coordinator`
 - [x] Retag UD coordinator-like `yet` as `coordinator[adversative]`
 - [x] Retag UD coordinator-like `as well as` as `coordinator[additive]`
@@ -185,5 +186,4 @@ Current `CTeTex` results:
 - [x] Extend the stabilized rule table to `GENTLE`
 - [x] Extend the stabilized rule table to `CTeTex`
 - [x] Retag `other` as `adjective`
-- [ ] Adjudicate the remaining GUM-train residue (`Mat` in the quoted foreign string `Mat Fereder`)
 - [ ] Extend the stabilized rule table to the next overt-form corpus

@@ -34,7 +34,7 @@ Priority retags in the current EWT/GUM-stabilized layer:
 8. **`SCONJ` items as prepositions with clausal complements**
 9. **Relative and declarative `that`, `whether`, complement `if` including coordinated complement uses, and infinitival `for` as subordinators**
 10. **Infinitival `to` as `verb[auxiliary_infinitival]`**
-11. **`ADV` items in the current intransitive-preposition set as intransitive prepositions**
+11. **`ADV` items in the current intransitive-preposition set as intransitive prepositions, including the appendix-backed tranche `out`, `in`, `over`, `ago`, `before`, `once`, `forward`, `ahead`, `apart`, `hence`, and `forth`**
 12. **Contracted `n't` as `morpheme[negative_enclitic]`**
 13. **`so/SCONJ` auto-tagged as `preposition[clausal]`; compound indefinite items like `someone` and `nothing`, plus `whatever`, `whichever`, `other`, `such`, DET-tagged `quite`, dialectal determiner `them`, expressive `wtf`, `et al.`, and clause-marking `rather than` are normalized**
 14. **Low-frequency extensions already seen in GUM and later corpora are normalized into existing categories: `whosoever`, `oneself`, singular `s/he`, marginal determinative `yonder` plus prepositional `yonder`, foreign `une`, non-existential `there`, tokenized `self` in `self-` compounds, bare generic `one`, partitive `one of`, relative `that`/`which` recoverable from clause structure, and `where`/`when` as intransitive prepositions**
@@ -42,7 +42,7 @@ Priority retags in the current EWT/GUM-stabilized layer:
 16. **Delexicalized structural fallback for corpora like GUMReddit: articles, demonstratives, quantificational determinatives, personal pronouns, possessives, reflexives, indefinites, and expletives can still be recovered from features and dependencies even when lexical identity is hidden**
 17. **Narrow delexicalized MISC-hint recovery for GUMReddit:** segmented `what-ever`, relative `that`, relative `which`, short relative `who`/`whom`, and typo-corrected single-token items can be recovered when raw FORM/LEMMA are `_`; hints must not override overt lexical forms in ordinary corpora
 
-**Deferred / partial:** the original temporal-noun assumption does not hold in EWT. The `ADV -> preposition` layer now includes the broader EWT set in current use, but it is still a lexically enumerated rule layer rather than a general structural analysis of every preposition use.
+**Deferred / partial:** the original temporal-noun assumption does not hold in EWT. The `ADV -> preposition` layer now includes a broader appendix-backed corpus subset in current use, but it is still a lexically enumerated rule layer rather than a general structural analysis of every preposition use.
 
 ## Source Data
 

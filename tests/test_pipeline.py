@@ -620,10 +620,10 @@ class PipelineTest(unittest.TestCase):
 """
         _, rows = self.run_retag(sample)
         by_sent_token = {(row["sent_id"], row["token_id"]): row for row in rows}
-        self.assertEqual(by_sent_token[("s1", "4")]["rule_id"], "foreign-name-mat-review")
+        self.assertEqual(by_sent_token[("s1", "4")]["rule_id"], "foreign-name-mat")
         self.assertEqual(by_sent_token[("s1", "4")]["br_cat"], "x")
         self.assertEqual(by_sent_token[("s1", "4")]["br_subtype"], "foreign_component")
-        self.assertEqual(by_sent_token[("s1", "4")]["needs_review"], "true")
+        self.assertEqual(by_sent_token[("s1", "4")]["needs_review"], "false")
 
     def test_delexicalized_structural_rules_cover_pronouns_and_determiners(self) -> None:
         sample = """# sent_id = s1
@@ -938,6 +938,101 @@ class PipelineTest(unittest.TestCase):
         self.assertEqual(by_sent_token[("s18", "4")]["rule_id"], "preposition-yonder")
         self.assertEqual(by_sent_token[("s18", "4")]["br_cat"], "preposition")
         self.assertEqual(by_sent_token[("s18", "4")]["br_subtype"], "intransitive")
+
+    def test_appendix_backed_intransitive_preposition_adv_expansion(self) -> None:
+        sample = """# sent_id = s1
+# text = We came in.
+1\tWe\twe\tPRON\tPRP\tCase=Nom|Number=Plur|Person=1|PronType=Prs\t2\tnsubj\t2:nsubj\t_
+2\tcame\tcome\tVERB\tVBD\tMood=Ind|Tense=Past|VerbForm=Fin\t0\troot\t0:root\t_
+3\tin\tin\tADV\tRB\t_\t2\tadvmod\t2:advmod\tSpaceAfter=No
+4\t.\t.\tPUNCT\t.\t_\t2\tpunct\t2:punct\t_
+
+# sent_id = s2
+# text = It is over.
+1\tIt\tit\tPRON\tPRP\tCase=Nom|Number=Sing|Person=3|PronType=Prs\t3\tnsubj\t3:nsubj\t_
+2\tis\tbe\tAUX\tVBZ\tMood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin\t3\tcop\t3:cop\t_
+3\tover\tover\tADV\tRB\t_\t0\troot\t0:root\tSpaceAfter=No
+4\t.\t.\tPUNCT\t.\t_\t3\tpunct\t3:punct\t_
+
+# sent_id = s3
+# text = It happened years ago.
+1\tIt\tit\tPRON\tPRP\tCase=Nom|Number=Sing|Person=3|PronType=Prs\t2\tnsubj\t2:nsubj\t_
+2\thappened\thappen\tVERB\tVBD\tMood=Ind|Tense=Past|VerbForm=Fin\t0\troot\t0:root\t_
+3\tyears\tyear\tNOUN\tNNS\tNumber=Plur\t2\tobl\t2:obl\t_
+4\tago\tago\tADV\tRB\t_\t3\tadvmod\t3:advmod\tSpaceAfter=No
+5\t.\t.\tPUNCT\t.\t_\t2\tpunct\t2:punct\t_
+
+# sent_id = s4
+# text = We met before.
+1\tWe\twe\tPRON\tPRP\tCase=Nom|Number=Plur|Person=1|PronType=Prs\t2\tnsubj\t2:nsubj\t_
+2\tmet\tmeet\tVERB\tVBD\tMood=Ind|Tense=Past|VerbForm=Fin\t0\troot\t0:root\t_
+3\tbefore\tbefore\tADV\tRB\t_\t2\tadvmod\t2:advmod\tSpaceAfter=No
+4\t.\t.\tPUNCT\t.\t_\t2\tpunct\t2:punct\t_
+
+# sent_id = s5
+# text = I visited once.
+1\tI\tI\tPRON\tPRP\tCase=Nom|Number=Sing|Person=1|PronType=Prs\t2\tnsubj\t2:nsubj\t_
+2\tvisited\tvisit\tVERB\tVBD\tMood=Ind|Tense=Past|VerbForm=Fin\t0\troot\t0:root\t_
+3\tonce\tonce\tADV\tRB\t_\t2\tadvmod\t2:advmod\tSpaceAfter=No
+4\t.\t.\tPUNCT\t.\t_\t2\tpunct\t2:punct\t_
+
+# sent_id = s6
+# text = They moved forward.
+1\tThey\tthey\tPRON\tPRP\tCase=Nom|Number=Plur|Person=3|PronType=Prs\t2\tnsubj\t2:nsubj\t_
+2\tmoved\tmove\tVERB\tVBD\tMood=Ind|Tense=Past|VerbForm=Fin\t0\troot\t0:root\t_
+3\tforward\tforward\tADV\tRB\t_\t2\tadvmod\t2:advmod\tSpaceAfter=No
+4\t.\t.\tPUNCT\t.\t_\t2\tpunct\t2:punct\t_
+
+# sent_id = s7
+# text = Keep ahead.
+1\tKeep\tkeep\tVERB\tVB\tMood=Imp|VerbForm=Fin\t0\troot\t0:root\t_
+2\tahead\tahead\tADV\tRB\t_\t1\tadvmod\t1:advmod\tSpaceAfter=No
+3\t.\t.\tPUNCT\t.\t_\t1\tpunct\t1:punct\t_
+
+# sent_id = s8
+# text = Move apart.
+1\tMove\tmove\tVERB\tVB\tMood=Imp|VerbForm=Fin\t0\troot\t0:root\t_
+2\tapart\tapart\tADV\tRB\t_\t1\tadvmod\t1:advmod\tSpaceAfter=No
+3\t.\t.\tPUNCT\t.\t_\t1\tpunct\t1:punct\t_
+
+# sent_id = s9
+# text = Hence we left.
+1\tHence\thence\tADV\tRB\t_\t3\tadvmod\t3:advmod\t_
+2\twe\twe\tPRON\tPRP\tCase=Nom|Number=Plur|Person=1|PronType=Prs\t3\tnsubj\t3:nsubj\t_
+3\tleft\tleave\tVERB\tVBD\tMood=Ind|Tense=Past|VerbForm=Fin\t0\troot\t0:root\tSpaceAfter=No
+4\t.\t.\tPUNCT\t.\t_\t3\tpunct\t3:punct\t_
+
+# sent_id = s10
+# text = Go forth.
+1\tGo\tgo\tVERB\tVB\tMood=Imp|VerbForm=Fin\t0\troot\t0:root\t_
+2\tforth\tforth\tADV\tRB\t_\t1\tadvmod\t1:advmod\tSpaceAfter=No
+3\t.\t.\tPUNCT\t.\t_\t1\tpunct\t1:punct\t_
+
+# sent_id = s11
+# text = We walked out.
+1\tWe\twe\tPRON\tPRP\tCase=Nom|Number=Plur|Person=1|PronType=Prs\t2\tnsubj\t2:nsubj\t_
+2\twalked\twalk\tVERB\tVBD\tMood=Ind|Tense=Past|VerbForm=Fin\t0\troot\t0:root\t_
+3\tout\tout\tADV\tRB\t_\t2\tadvmod\t2:advmod\tSpaceAfter=No
+4\t.\t.\tPUNCT\t.\t_\t2\tpunct\t2:punct\t_
+"""
+        _, rows = self.run_retag(sample)
+        by_sent_token = {(row["sent_id"], row["token_id"]): row for row in rows}
+        for sent_id, token_id in [
+            ("s1", "3"),
+            ("s2", "3"),
+            ("s3", "4"),
+            ("s4", "3"),
+            ("s5", "3"),
+            ("s6", "3"),
+            ("s7", "2"),
+            ("s8", "2"),
+            ("s9", "1"),
+            ("s10", "2"),
+            ("s11", "3"),
+        ]:
+            self.assertEqual(by_sent_token[(sent_id, token_id)]["rule_id"], "preposition-intransitive-adv")
+            self.assertEqual(by_sent_token[(sent_id, token_id)]["br_cat"], "preposition")
+            self.assertEqual(by_sent_token[(sent_id, token_id)]["br_subtype"], "intransitive")
 
     def test_audit_reports_expected_review_count(self) -> None:
         output_path, _ = self.run_retag(include_text=False)
