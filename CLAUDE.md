@@ -6,7 +6,7 @@
 
 **Goal:** Build a parallel annotation layer for UD English corpora that retags selected CGEL/UD mismatch classes according to CGEL-aligned categories. This is a corpus engineering project, not a paper.
 
-**Approach:** Deterministic rule-based retagging with manual adjudication of residual cases. Parallel layer (not overwriting UD tags). The current stabilized layer covers EWT `dev`/`test`/`train`, GUM `dev`/`test`/`train`, ATIS `dev`/`test`/`train`, `en_gentle-ud-test`, `en_ctetex-ud-test`, `en_littleprince-ud-test`, `en_pronouns-ud-test`, and `en_pud-ud-test` using sidecar TSV output and a CSV rule table. GUMReddit is frozen at partial coverage through a structural fallback layer plus narrow MISC-hint recovery because its surface FORM/LEMMA columns are delexicalized.
+**Approach:** Deterministic rule-based retagging with manual adjudication of residual cases. Parallel layer (not overwriting UD tags). The current stabilized layer covers EWT `dev`/`test`/`train`, GUM `dev`/`test`/`train`, ATIS `dev`/`test`/`train`, ParTUT `dev`/`test`/`train`, `en_gentle-ud-test`, `en_ctetex-ud-test`, `en_littleprince-ud-test`, `en_pronouns-ud-test`, and `en_pud-ud-test` using sidecar TSV output and a CSV rule table. LinES is in active cleanup with a small residual review queue concentrated in singular `one`. GUMReddit is frozen at partial coverage through a structural fallback layer plus narrow MISC-hint recovery because its surface FORM/LEMMA columns are delexicalized.
 
 ## Annotation Layer
 
@@ -38,9 +38,10 @@ Priority retags in the current EWT/GUM-stabilized layer:
 12. **Contracted `n't` as `morpheme[negative_enclitic]`**
 13. **`so/SCONJ` auto-tagged as `preposition[clausal]`; compound indefinite items like `someone` and `nothing`, plus `whatever`, `whichever`, `other`, `such`, DET-tagged `quite`, dialectal determiner `them`, expressive `wtf`, `et al.`, and clause-marking `rather than` are normalized**
 14. **Low-frequency extensions already seen in GUM and later corpora are normalized into existing categories: `whosoever`, `oneself`, singular `s/he`, marginal determinative `yonder` plus prepositional `yonder`, foreign `une`, non-existential `there`, tokenized `self` in `self-` compounds, bare generic `one`, partitive `one of`, relative `that`/`which` recoverable from clause structure, and `where`/`when` as intransitive prepositions**
-15. **Dependent possessive `DET` items remain pronouns.** When UD tags forms like `my`, `your`, `their`, or `its` as `DET`, the sidecar still maps them to `pronoun[possessive]`
-16. **Delexicalized structural fallback for corpora like GUMReddit: articles, demonstratives, quantificational determinatives, personal pronouns, possessives, reflexives, indefinites, and expletives can still be recovered from features and dependencies even when lexical identity is hidden**
-17. **Narrow delexicalized MISC-hint recovery for GUMReddit:** segmented `what-ever`, relative `that`, relative `which`, short relative `who`/`whom`, and typo-corrected single-token items can be recovered when raw FORM/LEMMA are `_`; hints must not override overt lexical forms in ordinary corpora
+15. **Current overt-form cleanup also covers PRON-tagged articles, foreign `DET/PRON` residue as `x[foreign_component]`, DET-tagged cardinal `one`, adjective `own`, truncated `wha'`, and prop-word `one/ones` where the local evidence is strong**
+16. **Dependent possessive `DET` items remain pronouns.** When UD tags forms like `my`, `your`, `their`, or `its` as `DET`, the sidecar still maps them to `pronoun[possessive]`
+17. **Delexicalized structural fallback for corpora like GUMReddit: articles, demonstratives, quantificational determinatives, personal pronouns, possessives, reflexives, indefinites, and expletives can still be recovered from features and dependencies even when lexical identity is hidden**
+18. **Narrow delexicalized MISC-hint recovery for GUMReddit:** segmented `what-ever`, relative `that`, relative `which`, short relative `who`/`whom`, and typo-corrected single-token items can be recovered when raw FORM/LEMMA are `_`; hints must not override overt lexical forms in ordinary corpora
 
 **Deferred / partial:** the original temporal-noun assumption does not hold in EWT. The `ADV -> preposition` layer now includes a broader appendix-backed corpus subset in current use, but it is still a lexically enumerated rule layer rather than a general structural analysis of every preposition use.
 
@@ -55,12 +56,14 @@ All 16 UD English corpora are symlinked in `data_raw/` from `corpora/ud-english/
 - **gentle** — `en_gentle-ud-test.conllu`
 - **ctetex** — `en_ctetex-ud-test.conllu`
 - **littleprince** — `en_littleprince-ud-test.conllu`
+- **partut** — `en_partut-ud-dev.conllu`, `en_partut-ud-test.conllu`, `en_partut-ud-train.conllu`
 - **pronouns** — `en_pronouns-ud-test.conllu`
 - **pud** — `en_pud-ud-test.conllu`
 - **gumreddit** — `en_gumreddit-ud-dev.conllu`, `en_gumreddit-ud-test.conllu`, `en_gumreddit-ud-train.conllu` (frozen partial structural coverage only)
 
-**Next targets after the EWT/GUM/ATIS/GENTLE/PUD/pronouns/littleprince pass:**
-- additional corpora with overt lexical forms, preferably `partut`, `lines`, or `pcedt`
+**Next targets after the EWT/GUM/ATIS/GENTLE/PUD/pronouns/littleprince/partut pass:**
+- resolve the remaining singular-`one` and `whatnot` residue in `lines`
+- then move to the next overt-form corpus, preferably `pcedt`
 
 **Additional corpora:**
 - **atis** — Air Travel Information System

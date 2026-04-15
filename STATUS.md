@@ -1,12 +1,12 @@
 # STATUS.md
 
-**Status:** EWT, GUM, ATIS, GENTLE, CTeTex, pronouns, PUD, and littleprince stabilized; GUMReddit frozen as partial coverage
+**Status:** EWT, GUM, ATIS, GENTLE, CTeTex, pronouns, PUD, littleprince, and partut stabilized; lines in targeted cleanup; GUMReddit frozen as partial coverage
 **Created:** 2026-04-14
 **Last updated:** 2026-04-14
 
 ## Current State
 
-The project now has a working CGEL-aligned sidecar pipeline across all EWT splits, all GUM splits, all ATIS splits, `en_gentle-ud-test`, `en_ctetex-ud-test`, `en_littleprince-ud-test`, `pronouns`, `PUD`, and a frozen partial-coverage GUMReddit layer.
+The project now has a working CGEL-aligned sidecar pipeline across all EWT splits, all GUM splits, all ATIS splits, all ParTUT splits, `en_gentle-ud-test`, `en_ctetex-ud-test`, `en_littleprince-ud-test`, `pronouns`, `PUD`, and a frozen partial-coverage GUMReddit layer. LinES is under active cleanup and now has a narrow residual review queue concentrated in singular `one`.
 
 Implemented:
 
@@ -31,6 +31,12 @@ Implemented:
 - `data_derived/en_gentle-ud-test.cgel.tsv`
 - `data_derived/en_ctetex-ud-test.cgel.tsv`
 - `data_derived/en_littleprince-ud-test.cgel.tsv`
+- `data_derived/en_partut-ud-dev.cgel.tsv`
+- `data_derived/en_partut-ud-test.cgel.tsv`
+- `data_derived/en_partut-ud-train.cgel.tsv`
+- `data_derived/en_lines-ud-dev.cgel.tsv`
+- `data_derived/en_lines-ud-test.cgel.tsv`
+- `data_derived/en_lines-ud-train.cgel.tsv`
 - `audit/en_ewt-ud-dev.cgel.txt`
 - `audit/en_ewt-ud-test.cgel.txt`
 - `audit/en_ewt-ud-train.cgel.txt`
@@ -48,6 +54,12 @@ Implemented:
 - `audit/en_gentle-ud-test.cgel.txt`
 - `audit/en_ctetex-ud-test.cgel.txt`
 - `audit/en_littleprince-ud-test.cgel.txt`
+- `audit/en_partut-ud-dev.cgel.txt`
+- `audit/en_partut-ud-test.cgel.txt`
+- `audit/en_partut-ud-train.cgel.txt`
+- `audit/en_lines-ud-dev.cgel.txt`
+- `audit/en_lines-ud-test.cgel.txt`
+- `audit/en_lines-ud-train.cgel.txt`
 
 Current covered mismatch classes:
 
@@ -85,6 +97,13 @@ Current covered mismatch classes:
 - tokenized `self` in `self-` compounds retagged as `noun[self_compound_initial]`
 - bare `one/PRON` can be recovered as generic pronoun even when UD omits `PronType=Prs`
 - `one/PRON` followed by `of` is treated as a fused-head cardinal determinative
+- PRON-tagged articles remain `determinative[article]`
+- foreign `DET/PRON` residue is demoted to `x[foreign_component]` rather than counting against English review burden
+- DET-tagged `one` in determiner function is treated as `determinative[cardinal]`
+- malformed `oneself` with lemma `one` is still recovered as `pronoun[reflexive]`
+- `own` is treated as `adjective`
+- plural `ones` and modified singular `one` are treated as `noun[prop_word]`
+- truncated `wha'` is treated as fused-head `what`
 - relative `that` can still be recovered as `subordinator[relative]` when UD omits `PronType=Rel` but enhanced dependencies mark `ref`
 - relative `that` and `which` can also be recovered structurally from relative-clause attachment even when features are missing or the pronoun is attached inside an `xcomp`
 - `where/PRON` is treated as `preposition[intransitive]`
@@ -151,6 +170,20 @@ Current `littleprince` results:
 
 - `test`: 2,032 rows, 2,032 auto, 0 review
 
+Current `partut` results:
+
+- `dev`: 626 rows, 626 auto, 0 review
+- `test`: 773 rows, 773 auto, 0 review
+- `train`: 9,570 rows, 9,570 auto, 0 review
+
+Current `lines` results:
+
+- `dev`: 6,102 rows, 6,095 auto, 7 review
+- `test`: 5,620 rows, 5,604 auto, 16 review
+- `train`: 18,502 rows, 18,476 auto, 26 review
+
+The remaining LinES review burden is now almost entirely singular `one`, with one residual `whatnot`. The unresolved `one` items mix generic-pronoun, fused-head numeral, and idiomatic uses in ways that are not yet cleanly token-local.
+
 ## Next Steps
 
 - [x] Symlink UD English corpora to `data_raw/` (16 corpora linked from `corpora/ud-english/`)
@@ -192,5 +225,6 @@ Current `littleprince` results:
 - [x] Extend the stabilized rule table to `GENTLE`
 - [x] Extend the stabilized rule table to `CTeTex`
 - [x] Extend the stabilized rule table to `littleprince`
+- [x] Extend the stabilized rule table to `partut`
 - [x] Retag `other` as `adjective`
-- [ ] Extend the stabilized rule table to the next overt-form corpus
+- [ ] Resolve the remaining singular-`one` and `whatnot` residue in `lines`

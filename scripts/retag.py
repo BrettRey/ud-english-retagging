@@ -216,7 +216,7 @@ def build_head_match_context(head_token: Dict[str, str], grandparent_token: Dict
     return context
 
 
-def build_token_match_context(token: Dict[str, str], next_token: Dict[str, str]) -> str:
+def build_token_match_context(token: Dict[str, str], prev_token: Dict[str, str], next_token: Dict[str, str]) -> str:
     misc_fields = parse_misc_fields(token.get("misc", ""))
     parts: List[str] = []
     token_feats = token.get("feats", "")
@@ -242,9 +242,18 @@ def build_token_match_context(token: Dict[str, str], next_token: Dict[str, str])
     deps = token.get("deps", "")
     if deps and deps != "_":
         parts.append(f"Deps={deps}")
+    prev_lemma = effective_lemma(prev_token)
+    if prev_lemma and prev_lemma != "_":
+        parts.append(f"PrevLemma={prev_lemma}")
+    prev_upos = prev_token.get("upos", "")
+    if prev_upos and prev_upos != "_":
+        parts.append(f"PrevUpos={prev_upos}")
     next_lemma = effective_lemma(next_token)
     if next_lemma and next_lemma != "_":
         parts.append(f"NextLemma={next_lemma}")
+    next_upos = next_token.get("upos", "")
+    if next_upos and next_upos != "_":
+        parts.append(f"NextUpos={next_upos}")
     return ";".join(parts)
 
 
@@ -257,8 +266,9 @@ def apply_rules(
     lemma = effective_lemma(token)
     upos = token["upos"]
     deprel = token["deprel"]
+    prev_token = sentence_tokens.get(str(int(token["id"]) - 1), {})
     next_token = sentence_tokens.get(str(int(token["id"]) + 1), {})
-    feats = build_token_match_context(token, next_token)
+    feats = build_token_match_context(token, prev_token, next_token)
     head_token = sentence_tokens.get(token["head"], {})
     grandparent_token = sentence_tokens.get(head_token.get("head", ""), {})
     head_lemma = effective_lemma(head_token)

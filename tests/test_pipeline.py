@@ -746,6 +746,15 @@ class PipelineTest(unittest.TestCase):
 3\tto\tto\tADP\tIN\t_\t4\tcase\t4:case\t_
 4\twhere\twhere\tPRON\tWRB\tPronType=Int\t2\tobl\t2:obl:to\tSpaceAfter=No
 5\t.\t.\tPUNCT\t.\t_\t2\tpunct\t2:punct\t_
+
+# sent_id = s4
+# text = the means whereby she won.
+1\tthe\tthe\tDET\tDT\tDefinite=Def|PronType=Art\t2\tdet\t2:det\t_
+2\tmeans\tmean\tNOUN\tNNS\tNumber=Plur\t0\troot\t0:root\t_
+3\twhereby\twhereby\tPRON\tWRB\tPronType=Rel\t5\tobl\t5:obl\t_
+4\tshe\tshe\tPRON\tPRP\tCase=Nom|Number=Sing|Person=3|PronType=Prs\t5\tnsubj\t5:nsubj\t_
+5\twon\twin\tVERB\tVBD\tMood=Ind|Tense=Past|VerbForm=Fin\t2\tacl:relcl\t2:acl:relcl\tSpaceAfter=No
+6\t.\t.\tPUNCT\t.\t_\t2\tpunct\t2:punct\t_
 """
         _, rows = self.run_retag(sample)
         by_sent_token = {(row["sent_id"], row["token_id"]): row for row in rows}
@@ -758,6 +767,122 @@ class PipelineTest(unittest.TestCase):
         self.assertEqual(by_sent_token[("s3", "4")]["rule_id"], "preposition-where-pron")
         self.assertEqual(by_sent_token[("s3", "4")]["br_cat"], "preposition")
         self.assertEqual(by_sent_token[("s3", "4")]["br_subtype"], "intransitive")
+        self.assertEqual(by_sent_token[("s4", "3")]["rule_id"], "preposition-whereby")
+        self.assertEqual(by_sent_token[("s4", "3")]["br_cat"], "preposition")
+        self.assertEqual(by_sent_token[("s4", "3")]["br_subtype"], "intransitive")
+
+    def test_lines_residue_rules_cover_foreign_strings_articles_and_misc_lexical_items(self) -> None:
+        sample = """# sent_id = s1
+# text = A great many have.
+1\tA\ta\tPRON\tDT\tCase=Nom\t4\tnsubj\t4:nsubj\t_
+2\tgreat\tgreat\tADJ\tJJ\tDegree=Pos\t1\tfixed\t1:fixed\t_
+3\tmany\tmany\tADJ\tJJ\tDegree=Pos\t1\tfixed\t1:fixed\t_
+4\thave\thave\tVERB\tVBP\tMood=Ind|Tense=Pres|VerbForm=Fin\t0\troot\t0:root\tSpaceAfter=No
+5\t.\t.\tPUNCT\t.\t_\t4\tpunct\t4:punct\t_
+
+# sent_id = s2
+# text = Morituri te salutant.
+1\tMorituri\tmorituri\tNOUN\tNN\tForeign=Yes\t3\tnsubj\t3:nsubj\t_
+2\tte\tte\tPRON\t_\tForeign=Yes\t3\tobj\t3:obj\t_
+3\tsalutant\tsalutant\tVERB\tVB\tForeign=Yes\t0\troot\t0:root\tSpaceAfter=No
+4\t.\t.\tPUNCT\t.\t_\t3\tpunct\t3:punct\t_
+
+# sent_id = s3
+# text = Du calme.
+1\tDu\tdu\tDET\tFGN\t_\t2\tdet\t2:det\t_
+2\tcalme\tcalme\tNOUN\tNN\t_\t0\troot\t0:root\tSpaceAfter=No
+3\t.\t.\tPUNCT\t.\t_\t2\tpunct\t2:punct\t_
+
+# sent_id = s4
+# text = One day passed.
+1\tOne\tone\tDET\tIND-SG\t_\t2\tdet\t2:det\t_
+2\tday\tday\tNOUN\tNN\tNumber=Sing\t3\tnsubj\t3:nsubj\t_
+3\tpassed\tpass\tVERB\tVBD\tMood=Ind|Tense=Past|VerbForm=Fin\t0\troot\t0:root\tSpaceAfter=No
+4\t.\t.\tPUNCT\t.\t_\t3\tpunct\t3:punct\t_
+
+# sent_id = s5
+# text = One found oneself there.
+1\tOne\tone\tPRON\tNN\t_\t2\tnsubj\t2:nsubj\t_
+2\tfound\tfind\tVERB\tVBD\tMood=Ind|Tense=Past|VerbForm=Fin\t0\troot\t0:root\t_
+3\toneself\tone\tPRON\tPRP\tReflex=Yes\t2\tobj\t2:obj\t_
+4\tthere\tthere\tADV\tRB\t_\t2\tadvmod\t2:advmod\tSpaceAfter=No
+5\t.\t.\tPUNCT\t.\t_\t2\tpunct\t2:punct\t_
+
+# sent_id = s6
+# text = Others arrived.
+1\tOthers\tother\tPRON\tJJ\tCase=Nom\t2\tnsubj\t2:nsubj\t_
+2\tarrived\tarrive\tVERB\tVBD\tMood=Ind|Tense=Past|VerbForm=Fin\t0\troot\t0:root\tSpaceAfter=No
+3\t.\t.\tPUNCT\t.\t_\t2\tpunct\t2:punct\t_
+
+# sent_id = s7
+# text = It has a department of its own.
+1\tIt\tit\tPRON\tPRP\tCase=Nom|Number=Sing|Person=3|PronType=Prs\t2\tnsubj\t2:nsubj\t_
+2\thas\thave\tVERB\tVBZ\tMood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin\t0\troot\t0:root\t_
+3\ta\ta\tDET\tDT\tDefinite=Ind|PronType=Art\t4\tdet\t4:det\t_
+4\tdepartment\tdepartment\tNOUN\tNN\tNumber=Sing\t2\tobj\t2:obj\t_
+5\tof\tof\tADP\tIN\t_\t7\tcase\t7:case\t_
+6\tits\tits\tPRON\tPRP$\tCase=Gen|Gender=Neut|Number=Sing|Person=3|Poss=Yes|PronType=Prs\t7\tnmod:poss\t7:nmod:poss\t_
+7\town\town\tPRON\tADJ\tCase=Nom\t4\tnmod\t4:nmod:of\tSpaceAfter=No
+8\t.\t.\tPUNCT\t.\t_\t2\tpunct\t2:punct\t_
+
+# sent_id = s8
+# text = wha' d' you say?
+1\twha'\twhat\tPRON\tWH\t_\t4\tobj\t4:obj\t_
+2\td'\tdo\tAUX\tVBP\tMood=Ind|Tense=Pres|VerbForm=Fin\t4\taux\t4:aux\t_
+3\tyou\tyou\tPRON\tPRP\tCase=Nom|Person=2|PronType=Prs\t4\tnsubj\t4:nsubj\t_
+4\tsay\tsay\tVERB\tVB\tVerbForm=Inf\t0\troot\t0:root\tSpaceAfter=No
+5\t?\t?\tPUNCT\t.\t_\t4\tpunct\t4:punct\t_
+
+# sent_id = s9
+# text = Much has been aired.
+1\tMuch\tMuch\tPRON\tADJ\tCase=Nom\t4\tnsubj:pass\t4:nsubj:pass\t_
+2\thas\thave\tAUX\tVBZ\tMood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin\t4\taux\t4:aux\t_
+3\tbeen\tbe\tAUX\tVBN\tTense=Past|VerbForm=Part\t4\taux:pass\t4:aux:pass\t_
+4\taired\taire\tVERB\tVBN\tTense=Past|VerbForm=Part|Voice=Pass\t0\troot\t0:root\tSpaceAfter=No
+5\t.\t.\tPUNCT\t.\t_\t4\tpunct\t4:punct\t_
+
+# sent_id = s10
+# text = The big ones arrived.
+1\tThe\tthe\tDET\tDT\tDefinite=Def|PronType=Art\t3\tdet\t3:det\t_
+2\tbig\tbig\tADJ\tJJ\tDegree=Pos\t3\tamod\t3:amod\t_
+3\tones\tone\tPRON\tNN\tCase=Nom\t4\tnsubj\t4:nsubj\t_
+4\tarrived\tarrive\tVERB\tVBD\tMood=Ind|Tense=Past|VerbForm=Fin\t0\troot\t0:root\tSpaceAfter=No
+5\t.\t.\tPUNCT\t.\t_\t4\tpunct\t4:punct\t_
+
+# sent_id = s11
+# text = The old one arrived.
+1\tThe\tthe\tDET\tDT\tDefinite=Def|PronType=Art\t3\tdet\t3:det\t_
+2\told\told\tADJ\tJJ\tDegree=Pos\t3\tamod\t3:amod\t_
+3\tone\tone\tPRON\tNN\tCase=Nom\t4\tnsubj\t4:nsubj\t_
+4\tarrived\tarrive\tVERB\tVBD\tMood=Ind|Tense=Past|VerbForm=Fin\t0\troot\t0:root\tSpaceAfter=No
+5\t.\t.\tPUNCT\t.\t_\t4\tpunct\t4:punct\t_
+"""
+        _, rows = self.run_retag(sample)
+        by_sent_token = {(row["sent_id"], row["token_id"]): row for row in rows}
+        self.assertEqual(by_sent_token[("s1", "1")]["rule_id"], "determiner-articles-pron")
+        self.assertEqual(by_sent_token[("s1", "1")]["br_cat"], "determinative")
+        self.assertEqual(by_sent_token[("s2", "2")]["rule_id"], "foreign-pronoun")
+        self.assertEqual(by_sent_token[("s2", "2")]["br_cat"], "x")
+        self.assertEqual(by_sent_token[("s3", "1")]["rule_id"], "foreign-determiner-fgn")
+        self.assertEqual(by_sent_token[("s3", "1")]["br_cat"], "x")
+        self.assertEqual(by_sent_token[("s4", "1")]["rule_id"], "numerative-cardinal-determiner-det")
+        self.assertEqual(by_sent_token[("s4", "1")]["br_subtype"], "cardinal")
+        self.assertEqual(by_sent_token[("s5", "3")]["rule_id"], "pronoun-reflexive-oneself-form")
+        self.assertEqual(by_sent_token[("s5", "3")]["br_subtype"], "reflexive")
+        self.assertEqual(by_sent_token[("s6", "1")]["rule_id"], "adjective-other")
+        self.assertEqual(by_sent_token[("s6", "1")]["br_cat"], "adjective")
+        self.assertEqual(by_sent_token[("s7", "7")]["rule_id"], "adjective-own")
+        self.assertEqual(by_sent_token[("s7", "7")]["br_cat"], "adjective")
+        self.assertEqual(by_sent_token[("s8", "1")]["rule_id"], "determiner-wh-headless-wha")
+        self.assertEqual(by_sent_token[("s8", "1")]["br_cat"], "determinative")
+        self.assertEqual(by_sent_token[("s9", "1")]["rule_id"], "determiner-quantificational")
+        self.assertEqual(by_sent_token[("s9", "1")]["br_subtype"], "quantificational")
+        self.assertEqual(by_sent_token[("s10", "3")]["rule_id"], "noun-prop-word-ones")
+        self.assertEqual(by_sent_token[("s10", "3")]["br_cat"], "noun")
+        self.assertEqual(by_sent_token[("s10", "3")]["br_subtype"], "prop_word")
+        self.assertEqual(by_sent_token[("s11", "3")]["rule_id"], "noun-prop-word-one-modified")
+        self.assertEqual(by_sent_token[("s11", "3")]["br_cat"], "noun")
+        self.assertEqual(by_sent_token[("s11", "3")]["br_subtype"], "prop_word")
 
     def test_additional_lexical_recovery_rules_cover_articles_possessives_demonstratives_relatives_and_partitives(self) -> None:
         sample = """# sent_id = s1
